@@ -1,12 +1,29 @@
 # @redairforce/wikijs-mcp
 
-A comprehensive **Model Context Protocol (MCP) server** for Wiki.js integration with hierarchical documentation support and multi-level context management. This local package provides Claude Code with powerful Wiki.js management capabilities.
+[![npm version](https://badge.fury.io/js/@redairforce%2Fwikijs-mcp.svg)](https://www.npmjs.com/package/@redairforce/wikijs-mcp)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+A comprehensive **Model Context Protocol (MCP) server** for Wiki.js integration with hierarchical documentation support and multi-level context management. Now available on npm for easy installation and use with Claude Code.
 
 ## 🚀 Quick Start
 
-### Local Installation
+### npm Installation (Recommended)
 
 ```bash
+# Install globally for CLI usage
+npm install -g @redairforce/wikijs-mcp
+
+# Or install locally in your project
+npm install @redairforce/wikijs-mcp
+```
+
+### Local Development Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/redairforce/wikijs-mcp.git
+cd wikijs-mcp
+
 # Install dependencies
 npm install
 
@@ -25,6 +42,19 @@ cp .env.example .env
 # Edit with your Wiki.js credentials
 WIKIJS_API_URL=https://your-wiki.example.com
 WIKIJS_TOKEN=your_jwt_token_here
+```
+
+### Quick CLI Test
+
+```bash
+# Test your Wiki.js connection
+wikijs-mcp test-connection
+
+# List existing pages
+wikijs-mcp list-pages
+
+# Start the MCP server
+wikijs-mcp server
 ```
 
 ### Usage with Claude Code
