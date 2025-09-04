@@ -1,0 +1,45 @@
+# Source files (only ship built dist)
+src/
+*.ts
+*.map
+tsconfig.json
+
+# Development files
+.env
+.env.example
+test/
+tests/
+*.test.js
+*.test.ts
+*.spec.js
+*.spec.ts
+
+# Development tools
+.eslintrc*
+.prettierrc*
+jest.config.*
+tsconfig.json
+
+# Documentation (keep README.md)
+docs/
+DEVELOPMENT.md
+CONTRIBUTING.md
+
+# Git and CI
+.git/
+.github/
+.gitignore
+.travis.yml
+.circleci/
+
+# Logs
+*.log
+logs/
+
+# Dependencies for development
+node_modules/
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
