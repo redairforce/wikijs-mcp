@@ -1,18 +1,17 @@
 # Publishing Guide for @redairforce/wikijs-mcp
 
-## 🚀 Automated Publishing via GitHub Actions
+## 🚀 Setting Up Automated Publishing
 
-This package uses GitHub Actions for automated npm publishing. There are two workflows:
+To enable automated npm publishing, you'll need to add the GitHub Actions workflows to your repository. 
 
-### 1. Manual/Release Publishing (`publish.yml`)
-Triggered by:
-- Creating a GitHub Release
-- Manual workflow dispatch
+### Creating the Workflow Files
 
-### 2. Automated Release (`release.yml`)
-Triggered by:
-- Pushing to main branch (auto-detects version bump from commit messages)
-- Manual workflow dispatch with specific version bump
+Create these files in your repository's `.github/workflows/` directory:
+
+1. **publish.yml** - For manual and release-based publishing
+2. **release.yml** - For automated version bumping and releasing
+
+You can find the complete workflow files in the section below or copy them from this guide.
 
 ## 📋 Prerequisites
 

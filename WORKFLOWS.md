@@ -1,3 +1,73 @@
+# GitHub Actions Workflow Files
+
+To enable automated npm publishing, create a `.github/workflows/` directory in your repository and add these files:
+
+## 📄 publish.yml
+
+```yaml
+name: Publish to npm
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to publish (leave empty to use package.json version)'
+        required: false
+        type: string
+      tag:
+        description: 'npm dist-tag (latest, beta, next)'
+        required: false
+        default: 'latest'
+        type: choice
+        options:
+          - latest
+          - beta
+          - next
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test || echo "No tests configured"
+
+      - name: Build package
+        run: npm run build
+
+      - name: Update version if specified
+        if: github.event.inputs.version != ''
+        run: npm version ${{ github.event.inputs.version }} --no-git-tag-version
+
+      - name: Publish to npm (Release)
+        if: github.event_name == 'release'
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish to npm (Manual)
+        if: github.event_name == 'workflow_dispatch'
+        run: npm publish --access public --tag ${{ github.event.inputs.tag || 'latest' }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+```
+
+## 📄 release.yml
+
+```yaml
 name: Release
 
 on:
@@ -108,10 +178,37 @@ jobs:
         run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+```
 
-      - name: Publish to GitHub Packages
-        run: |
-          npm config set @redairforce:registry https://npm.pkg.github.com
-          npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+## 🔑 Setup Instructions
+
+1. **Create the workflows directory:**
+   ```bash
+   mkdir -p .github/workflows
+   ```
+
+2. **Add the workflow files:**
+   - Copy the `publish.yml` content above to `.github/workflows/publish.yml`
+   - Copy the `release.yml` content above to `.github/workflows/release.yml`
+
+3. **Configure npm token:**
+   - Go to https://www.npmjs.com/settings/~/tokens
+   - Create an "Automation" token
+   - Add it as `NPM_TOKEN` in your GitHub repository secrets:
+     - Go to Settings → Secrets and variables → Actions
+     - Click "New repository secret"
+     - Name: `NPM_TOKEN`
+     - Value: Your npm token
+
+4. **Commit and push:**
+   ```bash
+   git add .github/workflows/
+   git commit -m "Add npm publishing workflows"
+   git push origin main
+   ```
+
+## 📝 Notes
+
+- You need a GitHub token with `workflow` scope to push workflow files
+- Alternatively, you can add these files directly through the GitHub web interface
+- The workflows will be active once they're in your repository's main branch
