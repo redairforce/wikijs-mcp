@@ -1,32 +1,32 @@
-  name: Node.js Package
+name: Node.js Package
 
-  on:
-    release:
-      types: [created]
+on:
+  release:
+    types: [created]
 
-  jobs:
-    build:
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v4
-        - uses: actions/setup-node@v4
-          with:
-            node-version: 20
-        - run: npm ci
-        - run: npm run build  # BUILD THE TYPESCRIPT
-        - run: npm test || echo "No tests configured"  # DON'T FAIL IF NO TESTS
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - run: npm run build  # BUILD THE TYPESCRIPT
+      - run: npm test || echo "No tests configured"  # DON'T FAIL IF NO TESTS
 
-    publish-npm:
-      needs: build
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v4
-        - uses: actions/setup-node@v4
-          with:
-            node-version: 20
-            registry-url: https://registry.npmjs.org/
-        - run: npm ci
-        - run: npm run build  # BUILD BEFORE PUBLISHING
-        - run: npm publish --access public  # PUBLIC ACCESS FOR SCOPED PACKAGE
-          env:
-            NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}  # UPPERCASE SECRET NAME
+  publish-npm:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://registry.npmjs.org/
+      - run: npm ci
+      - run: npm run build  # BUILD BEFORE PUBLISHING
+      - run: npm publish --access public  # PUBLIC ACCESS FOR SCOPED PACKAGE
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}  # UPPERCASE SECRET NAME
